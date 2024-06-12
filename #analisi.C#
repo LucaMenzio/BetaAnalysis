@@ -44,8 +44,7 @@ void analisi( ){
   //Config file definition
   ConfigFile cf("beta_config.ini");
 
-  const bool join_txt_tracker = false;
-  const bool tct_positions = false;
+  const bool join_txt_tracker = true;
 
   //opens txt file and takes the data
   std::string line;
@@ -244,7 +243,7 @@ void analisi( ){
   OutTree->Branch("t_thr", "std::vector<double>",&t_thr1);  // time at which a certain thr (in V) is passed
   OutTree->Branch("tot", "std::vector<double>",&tot1);
   OutTree->Branch("rms", "std::vector<double>",&rms1);
-  if (tct_positions) OutTree->Branch("x_pos", &x_pos);
+  OutTree->Branch("x_pos", &x_pos);
   OutTree->Branch("y_pos", &y_pos);
       
   n = 0;
@@ -262,10 +261,9 @@ void analisi( ){
 
   voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg0" )); 
   voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg1" ));
-  if(active_channels>15){
-    voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg2" ));
-    voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg3" ));
-  }
+  voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg2" ));
+  voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg3" ));
+  
   
   std::string trg_string = "trg";
   while(myReader.Next()){
@@ -302,7 +300,6 @@ void analisi( ){
     t1.clear();
   
     
-    
     if(join_txt_tracker){
 
       x_pos = x_tracker[n];
@@ -310,7 +307,7 @@ void analisi( ){
 
       n++;
       
-    }else if(tct_positions){
+    }else{
 
       x_pos = 0;
       y_pos = 0;
