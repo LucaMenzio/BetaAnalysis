@@ -46,7 +46,7 @@ void analisi( ){
 
   //TO BE ADDED TO CONFIG FILE
   const bool join_txt_tracker = false;
-  const bool tct_positions = false;
+  const bool tct_positions = true;
 
   //opens txt file and takes the data
   std::string line;
@@ -220,6 +220,8 @@ void analisi( ){
   t1.reserve(20);
   Analyzer *a1=new Analyzer();
   
+
+
   int event;
   //int evt_delta = 0; //for tracker sync
   
@@ -245,8 +247,8 @@ void analisi( ){
   OutTree->Branch("t_thr", "std::vector<double>",&t_thr1);  // time at which a certain thr (in V) is passed
   OutTree->Branch("tot", "std::vector<double>",&tot1);
   OutTree->Branch("rms", "std::vector<double>",&rms1);
-  if (tct_positions) OutTree->Branch("x_pos", &x_pos);
-  OutTree->Branch("y_pos", &y_pos);
+  if (join_txt_tracker || tct_positions) OutTree->Branch("x_pos", &x_pos);
+  if (join_txt_tracker || tct_positions) OutTree->Branch("y_pos", &y_pos);
       
   n = 0;
   int j_counter = 0;
@@ -268,6 +270,9 @@ void analisi( ){
     voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg3" ));
   }
   
+  if (tct_positions)
+    TTreeReaderArray<Double32_t> posReader(myReader, "pos" );
+
   std::string trg_string = "trg";
   while(myReader.Next()){
     
@@ -311,13 +316,11 @@ void analisi( ){
 
       n++;
       
-    }else if(tct_positions){
-
-      x_pos = 0;
-      y_pos = 0;
-
+    } 
+    else if(tct_positions){
+      x_pos = double(posReader[0]); 
+      y_pos = double(posReader[1]);
     }
-    
   
     int enable_channel_1 = 0;
     int invert_channel_1 = 0;
