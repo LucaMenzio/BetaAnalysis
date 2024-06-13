@@ -44,6 +44,7 @@ void analisi( ){
   //Config file definition
   ConfigFile cf("beta_config.ini");
 
+  //TO BE ADDED TO CONFIG FILE
   const bool join_txt_tracker = false;
   const bool tct_positions = false;
 
@@ -262,7 +263,7 @@ void analisi( ){
 
   voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg0" )); 
   voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg1" ));
-  if(active_channels>15){
+  if(active_channels>16){
     voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg2" ));
     voltageReader1.push_back(TTreeReaderArray<Double32_t>(myReader, "trg3" ));
   }
